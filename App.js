@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Button, TextInput, View, Text } from "react-native";
+import { StyleSheet, Button, ScrollView, View, Text } from "react-native";
 import ListItem from "./src/components/ListItem";
 import UserTextInput from "./src/components/UserTextInput";
 import SubmitPlaceButton from "./src/components/SubmitPlaceButton";
@@ -24,10 +24,22 @@ export default class App extends React.Component {
       });
     }
   };
+  handleOnItemPress = id => {
+    this.setState(prevState => {
+      return {
+        places: prevState.places.filter((place, i) => {
+          return i !== id;
+        })
+      };
+    });
+  };
   render() {
     const placesOutput = this.state.places.map((place, i) => (
-      // <Text key={i}>{place}</Text>
-      <ListItem place={place} key={i} />
+      <ListItem
+        place={place}
+        handleOnPress={() => this.handleOnItemPress(i)}
+        key={i}
+      />
     ));
     return (
       <View style={styles.container}>
@@ -38,7 +50,7 @@ export default class App extends React.Component {
           />
           <SubmitPlaceButton placeSubmitHandler={this.placeSubmitHandler} />
         </View>
-        <View style={styles.listContainer}>{placesOutput}</View>
+        <ScrollView style={styles.listContainer}>{placesOutput}</ScrollView>
       </View>
     );
   }
